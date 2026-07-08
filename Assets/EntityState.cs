@@ -1,28 +1,39 @@
 using UnityEngine;
 
-public class EntityState 
+public abstract class EntityState 
 {
+    protected Player player;
     protected StateMachine stateMachine;
-    protected string stateName;
+    protected string animBoolName;
 
-    public EntityState(StateMachine stateMachine, string stateName)
+    protected Animator anim;
+    protected Rigidbody2D rb;
+    protected PlayerInputSet input;
+
+    public EntityState(Player player, StateMachine stateMachine, string animBoolName)
     {
         this.stateMachine = stateMachine;
-        this.stateName = stateName;
+        this.animBoolName = animBoolName;
+        this.player = player;
+
+        anim = player.anim;
+        rb = player.rb;
+        input = player.input;
     }
 
     public virtual void Enter()
     {
-        Debug.Log("I Enter" + stateName);
-    }
-
-    public virtual void Exit()
-    {
-        Debug.Log("I Exit" + stateName);
+        player.anim.SetBool(animBoolName, true);
     }
 
     public virtual void Update()
     {
-        Debug.Log("I Update" + stateName);
+        anim.SetFloat("yVelocity", rb.linearVelocity.y);
     }
+
+    public virtual void Exit()
+    {
+        player.anim.SetBool(animBoolName, false);
+    }
+
 }
