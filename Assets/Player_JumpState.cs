@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player_JumpState : EntityState
+public class Player_JumpState : Player_AirState
 {
     public Player_JumpState(Player player, StateMachine stateMachine, string animBoolName) : base(player, stateMachine, animBoolName)
     {
@@ -17,7 +17,7 @@ public class Player_JumpState : EntityState
     {
         base.Update();
 
-        if (rb.linearVelocity.y < 0)
+        if (rb.linearVelocity.y < 0 && stateMachine.currentState != player.JumpAttackState)
             stateMachine.ChangeState(player.fallState);
     }
 }

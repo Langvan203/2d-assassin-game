@@ -13,7 +13,6 @@ public class StateMachine
 
     public void ChangeState(EntityState newState)
     {
-        Debug.Log($"Change State: {currentState?.GetType().Name} -> {newState.GetType().Name}");
         currentState.Exit();
         currentState = newState;
         currentState.Enter();

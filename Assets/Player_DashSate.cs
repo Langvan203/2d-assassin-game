@@ -1,0 +1,56 @@
+using UnityEngine;
+
+public class Player_DashSate : EntityState
+{
+    private float originalGravityScale;
+    private int dashDir;
+    public Player_DashSate(Player player, StateMachine stateMachine, string animBoolName) : base(player, stateMachine, animBoolName)
+    {
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+
+        dashDir = player.facingDir;
+        stateTimer = player.dashDuration;
+
+        originalGravityScale = rb.gravityScale;
+        rb.gravityScale = 0;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        CancelDashIfNeed();
+
+        player.setVelocity(player.dashSpeed * dashDir, 0);
+
+        if (stateTimer < 0)
+        {
+            if (player.groundDetected)
+                stateMachine.ChangeState(player.idleState);
+            else
+                stateMachine.ChangeState(player.fallState);
+
+        }
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        player.setVelocity(0, 0);
+        rb.gravityScale = originalGravityScale;
+    }
+
+    private void CancelDashIfNeed()
+    {
+        if(player.wallDetected)
+        {
+            if (player.groundDetected)
+                stateMachine.ChangeState(player.idleState);
+            else
+                stateMachine.ChangeState(player.wallSlideState);
+        }
+    }
+}
