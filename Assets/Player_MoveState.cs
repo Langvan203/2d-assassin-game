@@ -10,7 +10,7 @@ public class Player_MoveState : Player_GroudedState
     {
         base.Update();
 
-        if (player.moveInput.x == 0)
+        if (player.moveInput.x == 0  || player.wallDetected)
             stateMachine.ChangeState(player.idleState);
 
         player.setVelocity(player.moveInput.x * player.moveSpeed, rb.linearVelocity.y);
